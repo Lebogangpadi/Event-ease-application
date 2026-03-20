@@ -1,0 +1,105 @@
+﻿@model IEnumerable<event_ease_applicatiion.Models.Event>
+
+@{
+    ViewData["Title"] = "Events Dashboard";
+}
+
+<div class="page-header mb-5">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+        <div>
+            <h1 class="mb-1">Events Overview</h1>
+            <p class="text-muted">Manage your upcoming and past events</p>
+        </div>
+        <a asp-action="Create" class="btn btn-primary btn-lg glow">
+            <i class="bi bi-plus-lg me-2"></i> Create New Event
+        </a>
+    </div>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info text-center py-5">
+        <h4>No events found</h4>
+        <p>Start by creating your first event.</p>
+        <a asp-action="Create" class="btn btn-outline-light mt-3">Add Event</a>
+    </div>
+}
+else
+{
+    <div class="row g-4">
+        @foreach (var item in Model)
+        {
+            <div class="col-lg-4 col-md-6">
+                <div class="event-card animate-fade-up">
+                    <!-- Image (event or fallback) -->
+                    <div class="card-image">
+                        @if (!string.IsNullOrEmpty(item.ImageUrl))
+                        {
+                            <img src="@item.ImageUrl"
+                                 class="card-img-top"
+                                 alt="@item.EventName"
+                                 loading="lazy"
+                                 onerror="this.src='https://via.placeholder.com/600x400/161b22/6366f1?text=No+Image'" />
+                        }
+                        else
+                        {
+                            <div class="placeholder-image">
+                                <i class="bi bi-calendar-event"></i>
+                            </div>
+                        }
+                    </div>
+
+                    <!-- Card Body -->
+                    <div class="card-body">
+                        <h5 class="card-title gradient-text">@item.EventName</h5>
+
+                        <div class="event-meta mb-3">
+                            <div class="d-flex align-items-center mb-2">
+                                <i class="bi bi-calendar-event me-2 text-primary"></i>
+                                <span>@(item.EventDate.ToString("ddd, dd MMM yyyy") ?? "Date TBD")</span>
+                            </div>
+                            @if (item.Venue != null)
+                            {
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-geo-alt me-2 text-accent"></i>
+                                    <span>@item.Venue.Name</span>
+                                </div>
+                            }
+                        </div>
+
+                        <p class="card-text text-muted">
+                            @(item.Description?.Length > 120
+                                                ? item.Description.Substring(0, 120) + "..." 
+                                                                        : item.Description ?? "No description provided.")
+                        </p>
+                    </div>
+
+                    <!-- Card Footer with Actions -->
+                    <div class="card-footer bg-transparent border-top border-border d-flex justify-content-between">
+                        <a asp-action="Details" asp-route-id="@item.EventId" class="btn btn-sm btn-outline-light">
+                            <i class="bi bi-eye me-1"></i> Details
+                        </a>
+                        <div>
+                            <a asp-action="Edit" asp-route-id="@item.EventId" class="btn btn-sm btn-outline-primary me-2">
+                                <i class="bi bi-pencil me-1"></i> Edit
+                            </a>
+                            <a asp-action="Delete" asp-route-id="@item.EventId" class="btn btn-sm btn-outline-danger">
+                                <i class="bi bi-trash me-1"></i> Delete
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- Optional: Pagination if you add it later -->
+    <!-- <div class="d-flex justify-content-center mt-5">
+        <nav aria-label="Events pagination">
+            <ul class="pagination">
+                ...
+            </ul>
+        </nav>
+    </div> -->
+}
+

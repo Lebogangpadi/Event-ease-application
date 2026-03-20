@@ -1,0 +1,82 @@
+﻿@model event_ease_applicatiion.Models.Venue
+
+@{
+    ViewData["Title"] = "Edit Venue";
+}
+
+<div class="edit-page-wrapper">
+    <div class="form-container animate-fade-up">
+        <div class="form-header text-center mb-4">
+            <h2 class="mb-1 gradient-text">Edit Venue</h2>
+            <p class="text-muted small">Update details for <strong>@Model.Name</strong></p>
+        </div>
+
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3 text-center"></div>
+
+            <!-- Hidden ID -->
+            <input type="hidden" asp-for="VenueId" />
+
+            <!-- Name -->
+            <div class="mb-4">
+                <label asp-for="Name" class="form-label"></label>
+                <input asp-for="Name" class="form-control" placeholder="e.g. The Grand Ballroom" />
+                <span asp-validation-for="Name" class="text-danger small"></span>
+            </div>
+
+            <!-- Location -->
+            <div class="mb-4">
+                <label asp-for="Location" class="form-label"></label>
+                <input asp-for="Location" class="form-control" placeholder="e.g. 123 Sandton Drive, Johannesburg" />
+                <span asp-validation-for="Location" class="text-danger small"></span>
+            </div>
+
+            <!-- Capacity -->
+            <div class="mb-4">
+                <label asp-for="Capacity" class="form-label"></label>
+                <input asp-for="Capacity" class="form-control" type="number" min="1" placeholder="e.g. 250" />
+                <span asp-validation-for="Capacity" class="text-danger small"></span>
+                <div class="form-text text-muted mt-1 small">
+                    Maximum number of people the venue can accommodate
+                </div>
+            </div>
+
+            <!-- Image URL -->
+            <div class="mb-4">
+                <label asp-for="ImageURL" class="form-label"></label>
+                <input asp-for="ImageURL" class="form-control"
+                       placeholder="https://example.com/venue-photo.jpg" />
+                <span asp-validation-for="ImageURL" class="text-danger small"></span>
+                <div class="form-text text-muted mt-1 small">
+                    Direct link to a high-quality photo of the venue
+                </div>
+            </div>
+
+            <!-- Venue Type -->
+            <div class="mb-5">
+                <label asp-for="VenueTypeId" class="form-label"></label>
+                <select asp-for="VenueTypeId" class="form-select" asp-items="ViewBag.VenueTypeId">
+                    <option value="">-- Select venue type --</option>
+                </select>
+                <span asp-validation-for="VenueTypeId" class="text-danger small"></span>
+            </div>
+
+            <!-- Buttons -->
+            <div class="d-flex gap-3 justify-content-center mt-4">
+                <button type="submit" class="btn btn-primary btn-lg px-5 glow">
+                    Save Changes
+                </button>
+                <a asp-action="Index" class="btn btn-outline-light px-4">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

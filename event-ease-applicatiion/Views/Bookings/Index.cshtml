@@ -1,0 +1,136 @@
+﻿@model IEnumerable<event_ease_applicatiion.Models.Booking>
+
+@{
+    ViewData["Title"] = "Bookings Dashboard";
+}
+
+<div class="bookings-page-wrapper">
+    <!-- Header + Create Button -->
+    <div class="page-header mb-5">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+            <div>
+                <h1 class="mb-1">Bookings Overview</h1>
+                <p class="text-muted">Track and manage all event bookings</p>
+            </div>
+            <a asp-action="Create" class="btn btn-primary btn-lg glow">
+                <i class="bi bi-plus-lg me-2"></i> New Booking
+            </a>
+        </div>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="stats-row row g-4 mb-5">
+        <div class="col-md-3 col-sm-6">
+            <div class="stat-card animate-fade-up">
+                <div class="stat-icon"><i class="bi bi-calendar-check"></i></div>
+                <div class="stat-value">@Model.Count()</div>
+                <div class="stat-label">Total Bookings</div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <div class="stat-card animate-fade-up" style="animation-delay: 0.1s;">
+                <div class="stat-icon"><i class="bi bi-calendar-event"></i></div>
+                <div class="stat-value">@Model.Count(b => b.BookingDate >= DateTime.Today)</div>
+                <div class="stat-label">Upcoming</div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <div class="stat-card animate-fade-up" style="animation-delay: 0.2s;">
+                <div class="stat-icon"><i class="bi bi-building"></i></div>
+                <div class="stat-value">@Model.Select(b => b.VenueId).Distinct().Count()</div>
+                <div class="stat-label">Unique Venues</div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <div class="stat-card animate-fade-up" style="animation-delay: 0.3s;">
+                <div class="stat-icon"><i class="bi bi-people-fill"></i></div>
+                <div class="stat-value">@Model.Select(b => b.EventId).Distinct().Count()</div>
+                <div class="stat-label">Unique Events</div>
+            </div>
+        </div>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info text-center py-5">
+            <h4>No bookings yet</h4>
+            <p>Create your first booking to get started.</p>
+            <a asp-action="Create" class="btn btn-outline-light mt-3">Create Booking</a>
+        </div>
+    }
+    else
+    {
+        <div class="row g-4">
+            @foreach (var item in Model)
+            {
+                <div class="col-xl-4 col-lg-6">
+                    <div class="booking-card animate-fade-up">
+                        <!-- Venue Image / Placeholder -->
+                        <div class="card-image">
+                            @if (item.Venue != null && !string.IsNullOrEmpty(item.Venue.ImageURL))
+                            {
+                                <img src="@item.Venue.ImageURL"
+                                     class="card-img-top"
+                                     alt="@(item.Venue.Name ?? "Venue")"
+                                     loading="lazy"
+                                     onerror="this.src='https://via.placeholder.com/600x340/161b22/6366f1?text=Venue'" />
+                            }
+                            else
+                            {
+                                <div class="placeholder-image">
+                                    <i class="bi bi-building"></i>
+                                </div>
+                            }
+                        </div>
+
+                        <!-- Card Content -->
+                        <div class="card-body">
+                            <h5 class="card-title gradient-text">
+                                @item.Event?.EventName
+                            </h5>
+
+                            <div class="booking-meta mb-3">
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="bi bi-calendar-event me-2 text-primary"></i>
+                                    <span>
+                                        @if (item.BookingDate != null)
+                                        {
+                                            @item.BookingDate.ToString("ddd, dd MMM yyyy • HH:mm")
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">Date not set</span>
+                                        }
+                                    </span>
+                                </div>
+
+                                @if (item.Venue != null)
+                                {
+                                    <div class="d-flex align-items-center">
+                                        <i class="bi bi-geo-alt me-2 text-accent"></i>
+                                        <span>@item.Venue.Name</span>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+
+                        <!-- Actions -->
+                        <div class="card-footer bg-transparent border-top border-border d-flex justify-content-between align-items-center">
+                            <a asp-action="Details" asp-route-id="@item.BookingId" class="btn btn-sm btn-outline-light">
+                                <i class="bi bi-eye me-1"></i> Details
+                            </a>
+                            <div class="d-flex gap-2">
+                                <a asp-action="Edit" asp-route-id="@item.BookingId" class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@item.BookingId" class="btn btn-sm btn-outline-danger">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

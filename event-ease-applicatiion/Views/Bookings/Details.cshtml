@@ -1,0 +1,123 @@
+﻿@model event_ease_applicatiion.Models.Booking
+
+@{
+    ViewData["Title"] = "Booking Details";
+}
+
+<div class="booking-details-wrapper">
+    <!-- Hero / Event Title Section -->
+    <div class="booking-hero">
+        <div class="container">
+            <h1 class="booking-title gradient-text">
+                @Model?.Event?.EventName
+            </h1>
+            <p class="booking-date">
+                <i class="bi bi-calendar-check-fill me-2"></i>
+                @if (Model?.BookingDate != null)
+                {
+                    @Model.BookingDate.ToString("dddd, dd MMMM yyyy • HH:mm")
+                }
+                else
+                {
+                    <span class="text-muted">Date not set</span>
+                }
+            </p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-9 col-xl-8">
+                <div class="booking-details-card animate-fade-up">
+                    <div class="card-body p-4 p-md-5">
+                        <!-- Venue Section -->
+                        <div class="venue-section mb-5">
+                            <h4 class="mb-4">
+                                <i class="bi bi-building-fill me-2 text-accent"></i>
+                                Venue
+                            </h4>
+
+                            @if (Model?.Venue != null)
+                            {
+                                <div class="d-flex flex-column flex-md-row gap-4 align-items-md-start">
+                                    @if (!string.IsNullOrEmpty(Model.Venue.ImageURL))
+                                    {
+                                        <div class="venue-image-wrapper">
+                                            <img src="@Model.Venue.ImageURL"
+                                                 alt="@Model.Venue.Name"
+                                                 class="venue-image rounded shadow-sm"
+                                                 onerror="this.src='https://via.placeholder.com/400x280/161b22/6366f1?text=Venue'" />
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="venue-placeholder rounded">
+                                            <i class="bi bi-building"></i>
+                                        </div>
+                                    }
+
+                                    <div class="venue-info">
+                                        <h5 class="mb-2">@Model.Venue.Name</h5>
+                                        <p class="text-muted mb-2">
+                                            <i class="bi bi-geo-alt-fill me-2"></i>
+                                            @Model.Venue.Location
+                                        </p>
+                                        @if (Model.Venue.Capacity != 0)
+                                        {
+                                            <p class="mb-0">
+                                                <strong>Capacity:</strong>
+                                                @Model.Venue.Capacity.ToString("N0") people
+                                            </p>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <p class="text-muted fst-italic">No venue information available.</p>
+                            }
+                        </div>
+
+                        <!-- Booking Information -->
+                        <div class="booking-info-section">
+                            <h5 class="mb-3">Booking Information</h5>
+                            <div class="info-grid">
+                                <div class="info-item">
+                                    <div class="info-label">Booking ID</div>
+                                    <div class="info-value">@Model?.BookingId</div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-label">Booked For Event</div>
+                                    <div class="info-value">@(Model?.Event?.EventName ?? "—")</div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-label">Date & Time</div>
+                                    <div class="info-value">
+                                        @(Model?.BookingDate.ToString("ddd, dd MMM yyyy • HH:mm") ?? "Not specified")
+                                    </div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-label">Venue</div>
+                                    <div class="info-value">@(Model?.Venue?.Name ?? "Not assigned")</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="d-flex flex-wrap gap-3 justify-content-center mt-5 pt-4 border-top border-border">
+                            <a asp-action="Edit" asp-route-id="@Model?.BookingId"
+                               class="btn btn-primary btn-lg px-5 glow">
+                                <i class="bi bi-pencil me-2"></i> Edit Booking
+                            </a>
+                            <a asp-action="Index" class="btn btn-outline-light btn-lg px-5">
+                                <i class="bi bi-arrow-left me-2"></i> Back to Bookings
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

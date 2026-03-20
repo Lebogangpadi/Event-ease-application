@@ -1,0 +1,68 @@
+﻿@model event_ease_applicatiion.Models.Booking
+
+@{
+    ViewData["Title"] = "Create Booking";
+}
+
+<div class="create-page-wrapper">
+    <div class="form-container animate-fade-up">
+        <div class="form-header text-center mb-4">
+            <h2 class="mb-1 gradient-text">New Booking</h2>
+            <p class="text-muted small">Connect an event with a venue and set the date</p>
+        </div>
+
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-4 text-center"></div>
+
+            <!-- Event -->
+            <div class="mb-4">
+                <label asp-for="EventId" class="form-label">Event</label>
+                <select asp-for="EventId" class="form-select" asp-items="ViewBag.EventId">
+                    <option value="">-- Select event --</option>
+                </select>
+                <span asp-validation-for="EventId" class="text-danger small"></span>
+                <div class="form-text text-muted mt-1 small">
+                    Choose which event this booking is for
+                </div>
+            </div>
+
+            <!-- Venue -->
+            <div class="mb-4">
+                <label asp-for="VenueId" class="form-label">Venue</label>
+                <select asp-for="VenueId" class="form-select" asp-items="ViewBag.VenueId">
+                    <option value="">-- Select venue --</option>
+                </select>
+                <span asp-validation-for="VenueId" class="text-danger small"></span>
+                <div class="form-text text-muted mt-1 small">
+                    Select the venue where the event will take place
+                </div>
+            </div>
+
+            <!-- Booking Date -->
+            <div class="mb-5">
+                <label asp-for="BookingDate" class="form-label">Booking Date & Time</label>
+                <input asp-for="BookingDate" class="form-control" type="datetime-local" />
+                <span asp-validation-for="BookingDate" class="text-danger small"></span>
+                <div class="form-text text-muted mt-1 small">
+                    When the event is scheduled to take place
+                </div>
+            </div>
+
+            <!-- Buttons -->
+            <div class="d-flex gap-3 justify-content-center mt-5">
+                <button type="submit" class="btn btn-primary btn-lg px-5 glow">
+                    Create Booking
+                </button>
+                <a asp-action="Index" class="btn btn-outline-light px-4">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

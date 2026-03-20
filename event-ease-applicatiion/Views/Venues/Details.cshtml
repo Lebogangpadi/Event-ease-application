@@ -1,0 +1,91 @@
+﻿@model event_ease_applicatiion.Models.Venue
+
+@{
+    ViewData["Title"] = "Venue Details";
+}
+
+<div class="venue-details-wrapper">
+    <!-- Hero / Cover Image -->
+    <div class="venue-hero">
+        @if (!string.IsNullOrEmpty(Model?.ImageURL))
+        {
+            <img src="@Model.ImageURL"
+                 alt="@Model.Name"
+                 class="venue-hero-image"
+                 onerror="this.style.display='none'" />
+        }
+        else
+        {
+            <div class="venue-hero-placeholder">
+                <i class="bi bi-building-fill"></i>
+            </div>
+        }
+
+        <div class="venue-hero-overlay">
+            <div class="container">
+                <h1 class="venue-title gradient-text">@Model?.Name</h1>
+                <p class="venue-location">
+                    <i class="bi bi-geo-alt-fill me-2"></i>
+                    @Model?.Location
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="venue-details-card animate-fade-up">
+                    <div class="card-body p-4 p-md-5">
+                        <!-- Quick Info Grid -->
+                        <div class="row g-4 mb-5">
+                            <div class="col-md-6">
+                                <div class="info-box">
+                                    <div class="info-icon"><i class="bi bi-people-fill"></i></div>
+                                    <div>
+                                        <h6 class="mb-1">Capacity</h6>
+                                        <p class="mb-0 fs-4 fw-bold">
+                                            @(Model?.Capacity.ToString("N0") ?? "—") people
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="info-box">
+                                    <div class="info-icon"><i class="bi bi-tags-fill"></i></div>
+                                    <div>
+                                        <h6 class="mb-1">Type</h6>
+                                        <p class="mb-0 fs-5 fw-semibold">
+                                            @(Model?.VenueType?.Name ?? "Not specified")
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Location Section -->
+                        <div class="mb-5">
+                            <h5 class="mb-3">
+                                <i class="bi bi-geo-alt-fill me-2 text-accent"></i>
+                                Location
+                            </h5>
+                            <p class="text-muted fs-5">@Model?.Location</p>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="d-flex flex-wrap gap-3 justify-content-center mt-5 pt-4 border-top border-border">
+                            <a asp-action="Edit" asp-route-id="@Model?.VenueId"
+                               class="btn btn-primary btn-lg px-5 glow">
+                                <i class="bi bi-pencil me-2"></i> Edit Venue
+                            </a>
+                            <a asp-action="Index" class="btn btn-outline-light btn-lg px-5">
+                                <i class="bi bi-arrow-left me-2"></i> Back to Venues
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
